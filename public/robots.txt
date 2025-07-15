@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /private/
+
+Allow: /
+
+Sitemap: https://dtal-audit-ggf9grhrbbcme7gv.australiaeast-01.azurewebsites.net/sitemap.xml 

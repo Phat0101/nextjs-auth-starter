@@ -55,12 +55,8 @@ export default async function Home() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-extrabold mb-6 text-gray-900">
-            PDF Data Extraction Platform
+            Data Extraction Platform
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Upload PDF documents and extract structured data using AI-powered analysis.
-            Perfect for invoices, contracts, forms, and reports.
-          </p>
           <div className="mt-8">
             <Link
               href="/jobs/new"
@@ -109,7 +105,7 @@ export default async function Home() {
             )}
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="bg-white rounded-lg shadow-lg p-8 text-black">
             <h2 className="text-2xl font-bold mb-4 text-gray-900">Features</h2>
             <ul className="space-y-3">
               <li className="flex items-start">
