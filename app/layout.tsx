@@ -4,7 +4,7 @@ import Header from "./Header";
 
 export const metadata = {
   title: "DTAL Audit",
-  description: "Upload and extract data from PDF files using AI",
+  description: "DTAL customs audit system",
 };
 
 export default function RootLayout({

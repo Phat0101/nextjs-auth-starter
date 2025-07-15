@@ -1,24 +1,45 @@
-import prisma from "@/lib/prisma";
 import { createSecureResponse } from "../security-headers";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get("page") || "1");
-    const jobsPerPage = 5;
-    const offset = (page - 1) * jobsPerPage;
+    // Return 3 fake jobs instead of reading from database
+    const fakeJobs = [
+      {
+        id: "1",
+        title: "Invoice eagle",
+        description: "Processing invoice eagle",
+        fileName: "test.pdf",
+        fileSize: 2048576,
+        status: "completed",
+        createdAt: new Date("2024-01-15T10:30:00Z"),
+        updatedAt: new Date("2024-01-15T10:35:00Z"),
+      },
+      {
+        id: "2", 
+        title: "test",
+        description: "test",
+        fileName: "test.pdf",
+        fileSize: 1536000,
+        status: "processing",
+        createdAt: new Date("2024-01-14T14:20:00Z"),
+        updatedAt: new Date("2024-01-14T14:25:00Z"),
+      },
+      {
+        id: "3",
+        title: "test",
+        description: "test",
+        fileName: "test.pdf", 
+        fileSize: 3145728,
+        status: "pending",
+        createdAt: new Date("2024-01-13T09:15:00Z"),
+        updatedAt: new Date("2024-01-13T09:15:00Z"),
+      }
+    ];
 
-    // Fetch paginated jobs
-    const jobs = await prisma.job.findMany({
-      skip: offset,
-      take: jobsPerPage,
-      orderBy: { createdAt: "desc" },
+    return createSecureResponse({ 
+      jobs: fakeJobs, 
+      totalPages: 1 
     });
-
-    const totalJobs = await prisma.job.count();
-    const totalPages = Math.ceil(totalJobs / jobsPerPage);
-
-    return createSecureResponse({ jobs, totalPages });
   } catch (error) {
     console.error("Error fetching jobs:", error);
     return createSecureResponse(
