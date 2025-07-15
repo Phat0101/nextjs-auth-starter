@@ -28,7 +28,9 @@ model Job {
   title       String
   description String?
   fileName    String
-  filePath    String
+  fileContent Bytes
+  fileSize    Int
+  mimeType    String
   status      JobStatus @default(PENDING)
   result      String?
   userId      String

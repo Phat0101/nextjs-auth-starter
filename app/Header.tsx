@@ -10,8 +10,13 @@ export default function Header() {
     <header className="w-full bg-white shadow-md py-4 px-8">
       <nav className="flex justify-between items-center">
         <Link href="/" className="text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
-          PDF Extractor
+          DTAL Audit
         </Link>
+        {session?.user?.name && (
+          <div className="text-sm text-gray-500">
+            {session.user.name}
+          </div>
+        )}
         <div className="flex items-center space-x-4">
           <Link 
             href="/jobs" 
@@ -28,10 +33,6 @@ export default function Header() {
                 New Job
               </Link>
               <div className="flex items-center space-x-4">
-                <div className="text-sm text-gray-500">
-                  {session.user?.name && <div>{session.user.name}</div>}
-                  <div>{session.user?.email}</div>
-                </div>
                 <button
                   onClick={() => signOut()}
                   className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"

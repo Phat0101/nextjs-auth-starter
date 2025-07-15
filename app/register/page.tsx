@@ -3,31 +3,35 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+// import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    try {
-      event.preventDefault();
-      const formData = new FormData(event.currentTarget);
-      const signInResult = await signIn("credentials", {
-        ...Object.fromEntries(formData),
-        redirect: false,
-      });
+    // try {
+    //   event.preventDefault();
+    //   const formData = new FormData(event.currentTarget);
+    //   const signInResult = await signIn("credentials", {
+    //     ...Object.fromEntries(formData),
+    //     redirect: false,
+    //   });
 
-      if (signInResult?.error) {
-        setError("Failed to sign in after registration");
-        return;
-      }
+    //   if (signInResult?.error) {
+    //     setError("Failed to sign in after registration");
+    //     return;
+    //   }
 
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Registration failed");
-    }
+    //   router.push("/");
+    //   router.refresh();
+    // } catch (error) {
+    //   setError(error instanceof Error ? error.message : "Registration failed");
+    // }
+    event.preventDefault();
+    console.log("Register page do not throw error");
   }
 
   return (
@@ -38,7 +42,7 @@ export default function RegisterPage() {
             Create your account
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}> 
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="name" className="sr-only">

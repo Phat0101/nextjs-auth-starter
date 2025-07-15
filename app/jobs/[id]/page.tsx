@@ -4,7 +4,11 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-export default async function JobPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function JobPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
 
   const job = await prisma.job.findUnique({
@@ -17,6 +21,13 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
   if (!job) {
     notFound();
   }
+
+  // Convert fileContent buffer to a data URL
+  const pdfDataUrl = job.fileContent
+    ? `data:application/pdf;base64,${Buffer.from(job.fileContent).toString(
+        "base64"
+      )}`
+    : null;
 
   // Server action to delete the job
   async function deleteJob() {
@@ -33,14 +44,14 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'COMPLETED':
-        return 'bg-green-100 text-green-800';
-      case 'PROCESSING':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'FAILED':
-        return 'bg-red-100 text-red-800';
+      case "COMPLETED":
+        return "bg-green-100 text-green-800";
+      case "PROCESSING":
+        return "bg-yellow-100 text-yellow-800";
+      case "FAILED":
+        return "bg-red-100 text-red-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -49,19 +60,44 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
       <article className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-8">
         {/* Job Header */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-4xl font-extrabold text-gray-900">
-            {job.title}
-          </h1>
-          <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(job.status)}`}>
+          <h1 className="text-4xl font-extrabold text-gray-900">{job.title}</h1>
+          <span
+            className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(
+              job.status
+            )}`}
+          >
             {job.status}
           </span>
         </div>
+
+        {/* PDF Viewer Section */}
+        {pdfDataUrl ? (
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+              Document Viewer
+            </h2>
+            <div className="w-full h-[600px] border rounded-lg overflow-hidden">
+              <iframe
+                src={pdfDataUrl}
+                title={job.fileName}
+                width="100%"
+                height="100%"
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="mb-6 text-center text-gray-500">
+            No PDF document available for this job.
+          </div>
+        )}
 
         {/* Job Meta Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 p-4 bg-gray-50 rounded-lg">
           <div>
             <p className="text-sm text-gray-500 mb-1">Created by</p>
-            <p className="text-lg font-medium text-gray-800">{job.user?.name || "Anonymous"}</p>
+            <p className="text-lg font-medium text-gray-800">
+              {job.user?.name || "Anonymous"}
+            </p>
           </div>
           <div>
             <p className="text-sm text-gray-500 mb-1">Created on</p>
@@ -95,7 +131,9 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
 
         {/* Description Section */}
         <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-3">Description</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+            Description
+          </h2>
           <div className="bg-gray-50 p-4 rounded-lg">
             <p className="text-gray-700 leading-relaxed">
               {job.description || "No description provided for this job."}
@@ -105,7 +143,9 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
 
         {/* Results Section */}
         <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-3">Extraction Results</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+            Extraction Results
+          </h2>
           <div className="bg-gray-50 p-4 rounded-lg">
             {job.result ? (
               <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -113,10 +153,13 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
               </div>
             ) : (
               <p className="text-gray-500 italic">
-                {job.status === 'PENDING' && "Job is pending processing..."}
-                {job.status === 'PROCESSING' && "Job is currently being processed..."}
-                {job.status === 'FAILED' && "Job failed to process. No results available."}
-                {job.status === 'COMPLETED' && "No results available for this completed job."}
+                {job.status === "PENDING" && "Job is pending processing..."}
+                {job.status === "PROCESSING" &&
+                  "Job is currently being processed..."}
+                {job.status === "FAILED" &&
+                  "Job failed to process. No results available."}
+                {job.status === "COMPLETED" &&
+                  "No results available for this completed job."}
               </p>
             )}
           </div>

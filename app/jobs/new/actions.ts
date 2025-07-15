@@ -4,8 +4,6 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
-import { writeFile } from "fs/promises";
-import { join } from "path";
 
 export async function createJob(formData: FormData) {
   const session = await getServerSession(authOptions);
@@ -32,36 +30,28 @@ export async function createJob(formData: FormData) {
     throw new Error("File size must be less than 10MB");
   }
 
-  // Create uploads directory if it doesn't exist
-  const uploadsDir = join(process.cwd(), "public", "uploads");
-  
   try {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const filename = `${timestamp}-${file.name}`;
-    const filepath = join(uploadsDir, filename);
-
-    // Save file to disk
-    await writeFile(filepath, buffer);
-
-    // Create job record in database
+    // Create job record in database with file content
     await prisma.job.create({
       data: {
         title,
         description: description || null,
         fileName: file.name,
-        filePath: `/uploads/${filename}`,
+        fileContent: buffer,
+        fileSize: file.size,
+        mimeType: file.type,
         userId: session.user.id,
         status: "PENDING",
       },
     });
-
-    redirect("/jobs");
   } catch (error) {
     console.error("Error creating job:", error);
     throw new Error("Failed to create job. Please try again.");
   }
+
+  // Redirect after successful creation (outside try-catch)
+  redirect("/jobs");
 } 
