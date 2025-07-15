@@ -55,33 +55,6 @@ export default async function Home() {
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-24 px-8">
         <div className="max-w-2xl text-center">
           <h1 className="text-4xl font-extrabold mb-6 text-gray-900">Welcome to PDF Extractor</h1>
-                     <p className="text-lg text-gray-600 mb-8">
-             It looks like the database isn&apos;t set up yet. Please follow the setup instructions to get started.
-           </p>
-          <div className="bg-white rounded-lg shadow-md p-6 text-left">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">Quick Setup Steps:</h2>
-            <ol className="space-y-2 text-gray-700">
-              <li className="flex items-start">
-                <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-3 mt-0.5">1</span>
-                <span>Set up your database connection in <code className="bg-gray-100 px-2 py-1 rounded">.env</code></span>
-              </li>
-              <li className="flex items-start">
-                <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-3 mt-0.5">2</span>
-                <span>Run <code className="bg-gray-100 px-2 py-1 rounded">npx prisma migrate dev --name init</code></span>
-              </li>
-              <li className="flex items-start">
-                <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-3 mt-0.5">3</span>
-                <span>Run <code className="bg-gray-100 px-2 py-1 rounded">npx prisma db seed</code></span>
-              </li>
-              <li className="flex items-start">
-                <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-3 mt-0.5">4</span>
-                <span>Refresh this page</span>
-              </li>
-            </ol>
-          </div>
-          <p className="mt-6 text-sm text-gray-500">
-            Check the README.md file for detailed setup instructions.
-          </p>
         </div>
       </div>
     );
