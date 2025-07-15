@@ -4,7 +4,7 @@ import Header from "./Header";
 import Providers from "./providers";
 
 export const metadata = {
-  title: "PDF Extractor",
+  title: "DTAL Audit",
   description: "Upload and extract data from PDF files using AI",
 };
 

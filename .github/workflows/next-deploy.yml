@@ -31,7 +31,7 @@ jobs:
           npm run build
           mv ./build/static ./build/standalone/build
           if [ -d "./public" ]; then
-            mv ./public ./build/standalone
+          mv ./public ./build/standalone
           fi
 
       - name: "Deploy to Azure Web App"
