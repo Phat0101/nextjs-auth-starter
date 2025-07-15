@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
   distDir: "build",
+  env: {
+    AUTH_SECRET: process.env.AUTH_SECRET,
+    DATABASE_URL: process.env.DATABASE_URL,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXT_AUTH_SECRET: process.env.NEXT_AUTH_SECRET,
+  },
   
   // Add security headers
   async headers() {
