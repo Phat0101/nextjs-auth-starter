@@ -1,14 +1,29 @@
 "use client";
 
-import { useState } from "react";
-import { createJob } from "./actions";
+import { useState, useEffect } from "react";
+import { createJob, setCSRFToken } from "./actions";
 import { useRouter } from "next/navigation";
 
 export default function NewJobPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [csrfToken, setCSRFTokenState] = useState<string>("");
   const router = useRouter();
+
+  // Get CSRF token on component mount
+  useEffect(() => {
+    const fetchCSRFToken = async () => {
+      try {
+        const token = await setCSRFToken();
+        setCSRFTokenState(token);
+      } catch (err) {
+        console.error("Failed to set CSRF token:", err);
+        setError("Failed to initialize security token");
+      }
+    };
+    fetchCSRFToken();
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -35,13 +50,23 @@ export default function NewJobPage() {
       return;
     }
 
+    if (!csrfToken) {
+      setError("Security token not available. Please refresh the page.");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
     try {
       const formData = new FormData(e.currentTarget);
-      await createJob(formData);
-      // Redirect will be handled by the server action
+      // Add CSRF token to form data
+      formData.append('csrf-token', csrfToken);
+      
+      const result = await createJob(formData);
+      if (result.success) {
+        router.push('/jobs');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create job");
     } finally {
@@ -65,6 +90,9 @@ export default function NewJobPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* CSRF Token - Hidden field */}
+          <input type="hidden" name="csrf-token" value={csrfToken} />
+          
           <div>
             <label htmlFor="title" className="flex text-lg font-medium mb-2 items-center">
               Job Title 
@@ -128,7 +156,7 @@ export default function NewJobPage() {
           <div className="flex space-x-4">
             <button
               type="submit"
-              disabled={isLoading || !selectedFile}
+              disabled={isLoading || !selectedFile || !csrfToken}
               className="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
             >
               {isLoading ? (
