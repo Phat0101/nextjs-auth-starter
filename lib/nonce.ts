@@ -20,9 +20,4 @@ export const createCSPWithNonce = (nonce: string): string => {
     "upgrade-insecure-requests",
     "report-uri /api/csp-report"
   ].join("; ")
-}
-
-// Environment variable to enable/disable nonce-based CSP
-export const isNonceEnabled = (): boolean => {
-  return process.env.ENABLE_NONCE_CSP === 'true'
 } 

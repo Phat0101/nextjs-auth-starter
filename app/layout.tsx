@@ -1,25 +1,41 @@
 // app/layout.tsx
-import "./globals.css";
-import Header from "./Header";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import Header from './Header'
+import { headers } from 'next/headers'
 
-export const metadata = {
-  title: "DTAL Audit",
-  description: "DTAL customs audit system",
-};
+const inter = Inter({ subsets: ['latin'] })
 
-export default function RootLayout({
+export const metadata: Metadata = {
+  title: 'Next.js Auth Starter',
+  description: 'A Next.js 14 starter with authentication and jobs board.',
+}
+
+export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
+  const nonce = (await headers()).get('x-nonce')
+  
   return (
     <html lang="en">
-      <body>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <main className="flex-1">{children}</main>
-        </div>
+      <body className={inter.className}>
+        <Header />
+        <main className="container mx-auto px-4 py-8">{children}</main>
       </body>
+      {/* Add nonce to Next.js scripts */}
+      <script
+        nonce={nonce || ''}
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function () {
+              // Your custom scripts here
+            })();
+          `,
+        }}
+      ></script>
     </html>
-  );
+  )
 }

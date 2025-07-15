@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
     NEXT_AUTH_SECRET: process.env.NEXT_AUTH_SECRET,
   },
   
+  // Disable the 'X-Powered-By' header
+  poweredByHeader: false,
+  
   // Add security headers
   async headers() {
     return [
@@ -18,27 +21,6 @@ const nextConfig: NextConfig = {
         // Apply security headers to all routes
         source: "/(.*)",
         headers: [
-          // Content Security Policy (CSP) - Prevents XSS attacks
-          // Updated to allow PDF viewing in iframes
-          {
-            key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob:",
-              "font-src 'self' data:",
-              "object-src 'self' data:",
-              "base-uri 'self'",
-              "form-action 'self'",
-              "frame-ancestors 'self'",
-              "frame-src 'self' data:",
-              "block-all-mixed-content",
-              "upgrade-insecure-requests",
-              "report-uri /api/csp-report"
-            ].join("; ")
-          },
-          
           // X-Frame-Options - Prevents clickjacking attacks
           // Set to SAMEORIGIN to allow PDF iframes
           {
