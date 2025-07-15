@@ -21,6 +21,26 @@ const nextConfig: NextConfig = {
         // Apply security headers to all routes
         source: "/(.*)",
         headers: [
+          // Content Security Policy - Fallback if middleware doesn't set it
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'strict-dynamic'",
+              "style-src 'self'",
+              "img-src 'self' data: blob:",
+              "font-src 'self' data:",
+              "object-src 'self' data:",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'self'",
+              "frame-src 'self' data:",
+              "block-all-mixed-content",
+              "upgrade-insecure-requests",
+              "report-uri /api/csp-report"
+            ].join("; ")
+          },
+          
           // X-Frame-Options - Prevents clickjacking attacks
           // Set to SAMEORIGIN to allow PDF iframes
           {

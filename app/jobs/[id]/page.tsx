@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic"; // This disables SSG and ISR
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { validateCSRFToken, getCSRFToken, setCSRFToken } from "@/lib/csrf";
 
 export default async function JobPage({
   params,
@@ -19,6 +20,12 @@ export default async function JobPage({
     notFound();
   }
 
+  // Get or create CSRF token for the delete form
+  let csrfToken = await getCSRFToken();
+  if (!csrfToken) {
+    csrfToken = await setCSRFToken();
+  }
+
   // Convert fileContent buffer to a data URL
   const pdfDataUrl = job.fileContent
     ? `data:application/pdf;base64,${Buffer.from(job.fileContent).toString(
@@ -27,8 +34,14 @@ export default async function JobPage({
     : null;
 
   // Server action to delete the job
-  async function deleteJob() {
+  async function deleteJob(formData: FormData) {
     "use server";
+
+    // CSRF Protection
+    const csrfToken = formData.get('csrf-token') as string
+    if (!(await validateCSRFToken(csrfToken))) {
+      throw new Error('Invalid CSRF token')
+    }
 
     await prisma.job.delete({
       where: {
@@ -63,9 +76,12 @@ export default async function JobPage({
             ← Back to Jobs
           </Link>
           <form action={deleteJob}>
+            {/* CSRF Token - Hidden field */}
+            <input type="hidden" name="csrf-token" value={csrfToken || ''} />
             <button
               type="submit"
               className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              disabled={!csrfToken}
             >
               Delete Job
             </button>

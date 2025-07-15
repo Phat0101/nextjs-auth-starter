@@ -51,7 +51,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-24 px-8">
+    <div className="min-h-screen py-24 px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-extrabold mb-6 text-gray-900">

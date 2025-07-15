@@ -1,19 +1,6 @@
 "use server";
 
-import { randomBytes } from 'crypto'
-import { cookies } from 'next/headers'
-
-// Generate CSRF token
-export const generateCSRFToken = async (): Promise<string> => {
-  return randomBytes(32).toString('hex')
-}
-
-// Validate CSRF token
-const validateCSRFToken = async (formToken: string): Promise<boolean> => {
-  const cookieStore = await cookies()
-  const sessionToken = cookieStore.get('csrf-token')?.value
-  return sessionToken === formToken
-}
+import { validateCSRFToken } from '@/lib/csrf'
 
 export const createJob = async (formData: FormData) => {
   // CSRF Protection
@@ -66,17 +53,4 @@ export const createJob = async (formData: FormData) => {
     console.error('Error creating job:', error)
     throw new Error('Failed to create job')
   }
-}
-
-// Set CSRF token in cookie
-export const setCSRFToken = async (): Promise<string> => {
-  const token = await generateCSRFToken()
-  const cookieStore = await cookies()
-  cookieStore.set('csrf-token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    maxAge: 60 * 60 * 24 // 24 hours
-  })
-  return token
 } 
