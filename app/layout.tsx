@@ -1,7 +1,6 @@
 // app/layout.tsx
 import "./globals.css";
 import Header from "./Header";
-import Providers from "./providers";
 
 export const metadata = {
   title: "DTAL Audit",
@@ -16,12 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-          </div>
-        </Providers>
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <main className="flex-1">{children}</main>
+        </div>
       </body>
     </html>
   );

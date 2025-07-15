@@ -10,9 +10,6 @@ env:
   APPLICATION_PUBLISH_PROFILE: ${{ secrets.APP_PUBLISH_PROFILE }}
   WEBAPP_NAME: "dtal-audit"
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  NEXT_AUTH_SECRET: ${{ secrets.NEXT_AUTH_SECRET }}
-  AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-  NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
 
 jobs:
   build:

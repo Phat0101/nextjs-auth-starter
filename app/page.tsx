@@ -11,9 +11,6 @@ export default async function Home() {
     fileName: string;
     status: string;
     createdAt: Date;
-    user?: {
-      name: string | null;
-    } | null;
   }> = [];
   let hasError = false;
 
@@ -23,13 +20,6 @@ export default async function Home() {
         createdAt: "desc",
       },
       take: 6,
-      include: {
-        user: {
-          select: {
-            name: true,
-          },
-        },
-      },
     });
   } catch (error) {
     console.error("Database connection error:", error);
@@ -61,48 +51,103 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-24 px-8">
-      <h1 className="text-5xl font-extrabold mb-12 text-[#333333]">Recent Extraction Jobs</h1>
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 w-full max-w-6xl mb-8">
-        {jobs.map((job) => (
-          <Link key={job.id} href={`/jobs/${job.id}`} className="group">
-            <div className="border rounded-lg shadow-md bg-white p-6 hover:shadow-lg transition-shadow duration-300">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-semibold text-gray-900 group-hover:underline">{job.title}</h2>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(job.status)}`}>
-                  {job.status}
-                </span>
+    <div className="min-h-screen bg-gray-50 py-24 px-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-extrabold mb-6 text-gray-900">
+            PDF Data Extraction Platform
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Upload PDF documents and extract structured data using AI-powered analysis.
+            Perfect for invoices, contracts, forms, and reports.
+          </p>
+          <div className="mt-8">
+            <Link
+              href="/jobs/new"
+              className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Start Extraction
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Recent Jobs</h2>
+            {jobs.length === 0 ? (
+              <p className="text-gray-500">No jobs yet. Create your first extraction job!</p>
+            ) : (
+              <div className="space-y-4">
+                {jobs.slice(0, 3).map((job) => (
+                  <div key={job.id} className="border-b pb-4">
+                    <div className="flex items-center justify-between">
+                      <Link
+                        href={`/jobs/${job.id}`}
+                        className="text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        {job.title}
+                      </Link>
+                      <span className={`px-2 py-1 rounded text-xs ${getStatusColor(job.status)}`}>
+                        {job.status}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {job.description || 'No description'}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {job.fileName} • {job.createdAt.toLocaleDateString()}
+                    </p>
+                  </div>
+                ))}
+                <Link
+                  href="/jobs"
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  View all jobs →
+                </Link>
               </div>
-              <p className="text-sm text-gray-500 mb-2">by {job.user ? job.user.name : "Anonymous"}</p>
-              <p className="text-xs text-gray-400 mb-4">
-                {new Date(job.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
-              <div className="relative">
-                <p className="text-gray-700 leading-relaxed line-clamp-2">
-                  {job.description || "No description available."}
-                </p>
-                <div className="mt-2 text-sm text-gray-500">
-                  File: {job.fileName}
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-      {jobs.length === 0 && (
-        <div className="text-center py-8">
-          <p className="text-gray-600 mb-4">No extraction jobs found.</p>
-          <Link href="/jobs/new">
-            <button className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition">
-              Create Your First Job
-            </button>
+            )}
+          </div>
+
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Features</h2>
+            <ul className="space-y-3">
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Extract data from PDFs up to 10MB</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>AI-powered content analysis</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Real-time processing status</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Secure file handling</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                <span>Export results in multiple formats</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">
+            Ready to extract data from your PDFs?
+          </p>
+          <Link
+            href="/jobs/new"
+            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Create New Job
           </Link>
         </div>
-      )}
+      </div>
     </div>
   );
 }

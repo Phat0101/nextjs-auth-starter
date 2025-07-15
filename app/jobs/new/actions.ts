@@ -2,15 +2,8 @@
 
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/auth";
 
 export async function createJob(formData: FormData) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    throw new Error("You must be logged in to create a job");
-  }
-
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const file = formData.get("file") as File;
@@ -43,7 +36,6 @@ export async function createJob(formData: FormData) {
         fileContent: buffer,
         fileSize: file.size,
         mimeType: file.type,
-        userId: session.user.id,
         status: "PENDING",
       },
     });
