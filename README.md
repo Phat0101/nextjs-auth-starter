@@ -1,168 +1,252 @@
-# Next.js & Prisma Postgres Auth Starter
+# PDF Extractor App
 
-This repository provides a boilerplate to quickly set up a Next.js demo application with authentication using [NextAuth.js v4](https://next-auth.js.org/), [Prisma Postgres](https://www.prisma.io/postgres) and [Prisma ORM](https://www.prisma.io/orm), and deploy it to Vercel. It includes an easy setup process and example routes that demonstrate basic CRUD operations against the database.
+A modern web application for extracting data from PDF files using Next.js, Prisma, and PostgreSQL.
 
 ## Features
 
-- Next.js 15 app with App Router, Server Actions & API Routes
-- Data modeling, database migrations, seeding & querying
-- Log in and sign up authentication flows
-- CRUD operations to create, view and delete blog posts
-- Pagination, filtering & relations queries
+- **User Authentication**: Secure login/registration system
+- **PDF Upload**: Upload PDF files up to 10MB
+- **Job Management**: Create, view, and track extraction jobs
+- **Status Tracking**: Monitor job progress (Pending, Processing, Completed, Failed)
+- **Results Display**: View extracted data from your PDFs
+- **Responsive Design**: Works on desktop and mobile devices
 
-## Getting started
+## Tech Stack
 
-### 1. Install dependencies
+- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
+- **Backend**: Next.js API routes, Prisma ORM
+- **Database**: PostgreSQL
+- **Authentication**: NextAuth.js
+- **File Storage**: Local filesystem
 
-After cloning the repo and navigating into it, install dependencies:
+## Setup Instructions
 
-```
+### Prerequisites
+
+- Node.js 18+ installed
+- PostgreSQL database (can use Prisma Postgres)
+
+### 1. Clone and Install
+
+```bash
+git clone <your-repo-url>
+cd nextjs-auth-starter
 npm install
 ```
 
-### 1. Create a Prisma Postgres instance
+### 2. Database Setup
 
-Create a Prisma Postgres instance by running the following command:
+Create a Prisma Postgres instance:
 
-```
+```bash
 npx prisma init --db
 ```
 
-This command is interactive and will prompt you to:
+Follow the interactive prompts to:
+- Log in to Prisma Console
+- Select a region
+- Name your project
+- Copy the Database URL
 
-1. Log in to the [Prisma Console](https://console.prisma.io)
-1. Select a **region** for your Prisma Postgres instance
-1. Give a **name** to your Prisma project
+### 3. Environment Configuration
 
-Once the command has terminated, copy the **Database URL** from the terminal output. You'll need it in the next step when you configure your `.env` file.
-
-<!-- Create a Prisma Postgres database instance using [Prisma Data Platform](https://console.prisma.io):
-
-1. Navigate to [Prisma Data Platform](https://console.prisma.io).
-2. Click **New project** to create a new project.
-3. Enter a name for your project in the **Name** field.
-4. Inside the **Prisma Postgres** section, click **Get started**.
-5. Choose a region close to your location from the **Region** dropdown.
-6. Click **Create project** to set up your database. This redirects you to the database setup page.
-7. In the **Set up database access** section, copy the `DATABASE_URL`. You will use this in the next steps. -->
-
-### 2. Set up your `.env` file
-
-You now need to configure your database connection via an environment variable.
-
-First, create an `.env` file:
+Create a `.env` file:
 
 ```bash
 touch .env
 ```
 
-Then update the `.env` file by replacing the existing `DATABASE_URL` value with the one you previously copied. It will look similar to this:
+Add the following variables:
+
+```env
+DATABASE_URL="your-prisma-postgres-url"
+AUTH_SECRET="your-32-character-secret"
+```
+
+Generate a secure AUTH_SECRET:
 
 ```bash
-DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=PRISMA_POSTGRES_API_KEY"
-```
-
-To ensure your authentication works properly, you'll also need to set [env vars for NextAuth.js](https://next-auth.js.org/configuration/options):
-
-```bash
-AUTH_SECRET="RANDOM_32_CHARACTER_STRING"
-```
-
-You can generate a random 32 character string for the `AUTH_SECRET` secret with this command:
-
-```
 npx auth secret
 ```
 
-In the end, your entire `.env` file should look similar to this (but using _your own values_ for the env vars):
+### 4. Database Migration
 
-```bash
-DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMWEzMjBiYTEtYjg2Yy00ZTA5LThmZTktZDBhODA3YjQwZjBkIiwidGVuYW50X2lkIjoiY2RhYmM3ZTU1NzdmMmIxMmM0ZTI1Y2IwNWJhZmZhZmU4NjAxNzkxZThlMzhlYjI1NDgwNmIzZjI5NmU1NTkzNiIsImludGVybmFsX3NlY3JldCI6ImI3YmQzMjFhLTY2ODQtNGRiMC05ZWRiLWIyMGE2ZTQ0ZDMwMSJ9.JgKXQBatjjh7GIG3_fRHDnia6bDv8BdwvaX5F-XdBfw"
-
-AUTH_SECRET="gTwLSXFeNWFRpUTmxlRniOfegXYw445pd0k6JqXd7Ag="
-```
-
-### 3. Migrate the database
-
-Run the following commands to set up your database and Prisma schema:
+Run the migration to create tables:
 
 ```bash
 npx prisma migrate dev --name init
 ```
 
-<!--
-<details>
+### 5. Seed the Database
 
-<summary>Expand for <code>yarn</code>, <code>pnpm</code> or <code>bun</code></summary>
-
-```bash
-# Using yarn
-yarn prisma migrate dev --name init
-
-# Using pnpm
-pnpm prisma migrate dev --name init
-
-# Using bun
-bun prisma migrate dev --name init
-```
-
-</details> -->
-
-### 4. Seed the database
-
-Add initial data to your database:
+Add sample data:
 
 ```bash
 npx prisma db seed
 ```
 
-<details>
-
-<summary>Expand for <code>yarn</code>, <code>pnpm</code> or <code>bun</code></summary>
+### 6. Create Uploads Directory
 
 ```bash
-# Using yarn
-yarn prisma db seed
-
-# Using pnpm
-pnpm prisma db seed
-
-# Using bun
-bun prisma db seed
+mkdir -p public/uploads
 ```
 
-</details>
-
-### 5. Run the app
-
-Start the development server:
+### 7. Start the Application
 
 ```bash
 npm run dev
 ```
 
-<details>
+Visit `http://localhost:3000` to use the app.
 
-<summary>Expand for <code>yarn</code>, <code>pnpm</code> or <code>bun</code></summary>
+## Usage
+
+### Creating an Account
+
+1. Click "Sign In" in the header
+2. Click "No account? Register" 
+3. Fill in your details and register
+
+### Creating an Extraction Job
+
+1. Log in to your account
+2. Click "New Job" in the header
+3. Fill in the job details:
+   - **Job Title**: Descriptive name for your extraction
+   - **Description**: What you want to extract from the PDF
+   - **PDF File**: Upload your PDF file (max 10MB)
+4. Click "Create Extraction Job"
+
+### Managing Jobs
+
+- **View all jobs**: Click "Jobs" in the header
+- **View job details**: Click on any job title
+- **Delete jobs**: Use the delete button on job detail pages
+- **Track status**: See job status (Pending, Processing, Completed, Failed)
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/signin` - Sign in
+- `POST /api/auth/signup` - Sign up
+- `POST /api/auth/signout` - Sign out
+
+### Jobs
+- `GET /api/jobs` - Get paginated job list
+- `POST /api/jobs` - Create new job (via form action)
+
+## Database Schema
+
+### User Model
+- `id`: Unique identifier
+- `name`: User's full name
+- `email`: Email address (unique)
+- `password`: Hashed password
+- `jobs`: Related extraction jobs
+
+### Job Model
+- `id`: Unique identifier
+- `title`: Job title
+- `description`: What to extract
+- `fileName`: Original file name
+- `filePath`: Stored file path
+- `status`: Job status (PENDING, PROCESSING, COMPLETED, FAILED)
+- `result`: Extraction results
+- `userId`: Job owner
+- `createdAt`: Creation timestamp
+- `updatedAt`: Last update timestamp
+
+## File Upload
+
+- **Supported formats**: PDF only
+- **Maximum size**: 10MB
+- **Storage**: Local filesystem (`public/uploads/`)
+- **Naming**: Timestamped filenames to avoid conflicts
+
+## Security Features
+
+- **Authentication**: Required for all job operations
+- **File validation**: Type and size checking
+- **Input sanitization**: Form data validation
+- **CSRF protection**: Built-in with NextAuth.js
+
+## Development
+
+### Running Tests
 
 ```bash
-# Using yarn
-yarn dev
-
-# Using pnpm
-pnpm run dev
-
-# Using bun
-bun run dev
+npm test
 ```
 
-</details>
+### Code Formatting
 
-Once the server is running, visit `http://localhost:3000` to start using the app.
+```bash
+npm run lint
+```
 
-## Next steps
+### Database Commands
 
-- [Prisma ORM documentation](https://www.prisma.io/docs/orm)
-- [Prisma Client API reference](https://www.prisma.io/docs/orm/prisma-client)
-- [Join our Discord community](https://discord.com/invite/prisma)
-- [Follow us on Twitter](https://twitter.com/prisma)
+```bash
+# View database in browser
+npx prisma studio
+
+# Reset database
+npx prisma migrate reset
+
+# Deploy to production
+npx prisma migrate deploy
+```
+
+## Deployment
+
+### Environment Variables
+
+Set these in your production environment:
+
+```env
+DATABASE_URL="your-production-db-url"
+AUTH_SECRET="your-production-secret"
+```
+
+### Build Commands
+
+```bash
+npm run build
+npm start
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Support
+
+For issues or questions:
+1. Check the GitHub issues
+2. Create a new issue with detailed description
+3. Include error logs and steps to reproduce
+
+## Troubleshooting
+
+### Database Connection Issues
+- Verify your DATABASE_URL is correct
+- Check network connectivity
+- Ensure your Prisma Postgres instance is running
+
+### File Upload Issues
+- Check file size (must be < 10MB)
+- Verify file type (PDF only)
+- Ensure uploads directory exists and is writable
+
+### Authentication Issues
+- Verify AUTH_SECRET is set
+- Check that the user exists in the database
+- Clear browser cookies and try again

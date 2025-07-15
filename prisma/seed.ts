@@ -51,106 +51,125 @@ async function main() {
     edward: users[4].id,
   };
 
-  // Create 15 posts distributed among users
-  await prisma.post.createMany({
+  // Create sample extraction jobs
+  await prisma.job.createMany({
     data: [
-      // Alice's posts
+      // Alice's jobs
       { 
-        title: 'Getting Started with TypeScript and Prisma', 
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce id erat a lorem tincidunt ultricies. Vivamus porta bibendum nulla vel accumsan.', 
-        published: true, 
-        authorId: userIdMapping.alice 
+        title: 'Financial Report Q1 2024', 
+        description: 'Extract financial data from quarterly report', 
+        fileName: 'financial_report_q1_2024.pdf',
+        filePath: '/uploads/financial_report_q1_2024.pdf',
+        status: 'COMPLETED',
+        result: 'Successfully extracted 150 data points including revenue, expenses, and profit margins.',
+        userId: userIdMapping.alice 
       },
       { 
-        title: 'How ORMs Simplify Complex Queries', 
-        content: 'Duis sagittis urna ut sapien tristique convallis. Aenean vel ligula felis. Phasellus bibendum sem at elit dictum volutpat.', 
-        published: false, 
-        authorId: userIdMapping.alice 
-      },
-
-      // Bob's posts
-      { 
-        title: 'Mastering Prisma: Efficient Database Migrations', 
-        content: 'Ut ullamcorper nec erat id auctor. Nullam nec ligula in ex feugiat tincidunt. Cras accumsan vehicula tortor ut eleifend.', 
-        published: true, 
-        authorId: userIdMapping.bob 
-      },
-      { 
-        title: 'Best Practices for Type Safety in ORMs', 
-        content: 'Aliquam erat volutpat. Suspendisse potenti. Maecenas fringilla elit vel eros laoreet, et tempor sapien vulputate.', 
-        published: true, 
-        authorId: userIdMapping.bob 
-      },
-      { 
-        title: 'TypeScript Utility Types for Database Models', 
-        content: 'Donec ac magna facilisis, vestibulum ligula at, elementum nisl. Morbi volutpat eget velit eu egestas.', 
-        published: false, 
-        authorId: userIdMapping.bob 
+        title: 'Customer Survey Results', 
+        description: 'Extract customer feedback and ratings', 
+        fileName: 'customer_survey_2024.pdf',
+        filePath: '/uploads/customer_survey_2024.pdf',
+        status: 'PROCESSING',
+        userId: userIdMapping.alice 
       },
 
-      // Charlie's posts (no posts for Charlie)
+      // Bob's jobs
+      { 
+        title: 'Legal Contract Analysis', 
+        description: 'Extract key terms and conditions from contract', 
+        fileName: 'contract_analysis.pdf',
+        filePath: '/uploads/contract_analysis.pdf',
+        status: 'COMPLETED',
+        result: 'Extracted contract terms, dates, and obligations. Found 12 key clauses requiring attention.',
+        userId: userIdMapping.bob 
+      },
+      { 
+        title: 'Research Paper Data', 
+        description: 'Extract research data and citations', 
+        fileName: 'research_paper_2024.pdf',
+        filePath: '/uploads/research_paper_2024.pdf',
+        status: 'FAILED',
+        result: 'Failed to process due to poor image quality. Please upload a higher resolution document.',
+        userId: userIdMapping.bob 
+      },
+      { 
+        title: 'Technical Documentation', 
+        description: 'Extract API specifications and examples', 
+        fileName: 'api_documentation.pdf',
+        filePath: '/uploads/api_documentation.pdf',
+        status: 'PENDING',
+        userId: userIdMapping.bob 
+      },
 
-      // Diana's posts
+      // Charlie's jobs
       { 
-        title: 'Exploring Database Indexes and Their Performance Impact', 
-        content: 'Vivamus ac velit tincidunt, sollicitudin erat quis, fringilla enim. Aenean posuere est a risus placerat suscipit.', 
-        published: true, 
-        authorId: userIdMapping.diana 
-      },
-      { 
-        title: 'Choosing the Right Database for Your TypeScript Project', 
-        content: 'Sed vel suscipit lorem. Duis et arcu consequat, sagittis justo quis, pellentesque risus. Curabitur sed consequat est.', 
-        published: false, 
-        authorId: userIdMapping.diana 
-      },
-      { 
-        title: 'Designing Scalable Schemas with Prisma', 
-        content: 'Phasellus ut erat nec elit ultricies egestas. Vestibulum rhoncus urna eget magna varius pharetra.', 
-        published: true, 
-        authorId: userIdMapping.diana 
-      },
-      { 
-        title: 'Handling Relations Between Models in ORMs', 
-        content: 'Integer luctus ac augue at tristique. Curabitur varius nisl vitae mi fringilla, vel tincidunt nunc dictum.', 
-        published: false, 
-        authorId: userIdMapping.diana 
+        title: 'Invoice Processing', 
+        description: 'Extract invoice details and amounts', 
+        fileName: 'invoices_batch_1.pdf',
+        filePath: '/uploads/invoices_batch_1.pdf',
+        status: 'COMPLETED',
+        result: 'Processed 25 invoices. Total amount: $45,230.50. All vendor information extracted.',
+        userId: userIdMapping.charlie 
       },
 
-      // Edward's posts
+      // Diana's jobs
       { 
-        title: 'Why TypeORM Still Has Its Place in 2025', 
-        content: 'Morbi non arcu nec velit cursus feugiat sit amet sit amet mi. Etiam porttitor ligula id sem molestie, in tempor arcu bibendum.', 
-        published: true, 
-        authorId: userIdMapping.edward 
+        title: 'Medical Records Analysis', 
+        description: 'Extract patient data and diagnosis information', 
+        fileName: 'medical_records_jan2024.pdf',
+        filePath: '/uploads/medical_records_jan2024.pdf',
+        status: 'PROCESSING',
+        userId: userIdMapping.diana 
       },
       { 
-        title: 'NoSQL vs SQL: The Definitive Guide for Developers', 
-        content: 'Suspendisse a ligula sit amet risus ullamcorper tincidunt. Curabitur tincidunt, sapien id fringilla auctor, risus libero gravida odio, nec volutpat libero orci nec lorem.', 
-        published: true, 
-        authorId: userIdMapping.edward 
+        title: 'Insurance Claims Data', 
+        description: 'Extract claim details and amounts', 
+        fileName: 'insurance_claims_2024.pdf',
+        filePath: '/uploads/insurance_claims_2024.pdf',
+        status: 'COMPLETED',
+        result: 'Successfully processed 45 insurance claims. Total claims value: $125,000.',
+        userId: userIdMapping.diana 
       },
       { 
-        title: 'Optimizing Queries with Prisma\'s Select and Include', 
-        content: 'Proin vel diam vel nisi facilisis malesuada. Sed vitae diam nec magna mollis commodo a vitae nunc.', 
-        published: false, 
-        authorId: userIdMapping.edward 
+        title: 'Property Assessment Report', 
+        description: 'Extract property values and specifications', 
+        fileName: 'property_assessment.pdf',
+        filePath: '/uploads/property_assessment.pdf',
+        status: 'PENDING',
+        userId: userIdMapping.diana 
+      },
+
+      // Edward's jobs
+      { 
+        title: 'Academic Transcript Processing', 
+        description: 'Extract grades and course information', 
+        fileName: 'academic_transcript.pdf',
+        filePath: '/uploads/academic_transcript.pdf',
+        status: 'COMPLETED',
+        result: 'Extracted transcript data for 40 courses. GPA: 3.75. All credit hours calculated.',
+        userId: userIdMapping.edward 
       },
       { 
-        title: 'PostgreSQL Optimizations Every Developer Should Know', 
-        content: 'Nullam mollis quam sit amet lacus interdum, at suscipit libero pellentesque. Suspendisse in mi vitae magna finibus pretium.', 
-        published: true, 
-        authorId: userIdMapping.edward 
+        title: 'Bank Statement Analysis', 
+        description: 'Extract transaction history and balances', 
+        fileName: 'bank_statement_2024.pdf',
+        filePath: '/uploads/bank_statement_2024.pdf',
+        status: 'PROCESSING',
+        userId: userIdMapping.edward 
       },
       { 
-        title: 'Scaling Applications with Partitioned Tables in PostgreSQL', 
-        content: 'Cras vitae tortor in mauris tristique elementum non id ipsum. Nunc vitae pulvinar purus.', 
-        published: true, 
-        authorId: userIdMapping.edward 
+        title: 'Tax Document Processing', 
+        description: 'Extract tax information and deductions', 
+        fileName: 'tax_documents_2024.pdf',
+        filePath: '/uploads/tax_documents_2024.pdf',
+        status: 'FAILED',
+        result: 'Unable to process due to password protection. Please provide an unlocked document.',
+        userId: userIdMapping.edward 
       },
     ],
   });
 
-  console.log('Seeding completed.');
+  console.log('Seeding completed with sample extraction jobs.');
 }
 
 main()
