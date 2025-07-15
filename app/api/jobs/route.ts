@@ -11,8 +11,8 @@ export async function GET() {
         fileName: "test.pdf",
         fileSize: 2048576,
         status: "completed",
-        createdAt: new Date("2024-01-15T10:30:00Z"),
-        updatedAt: new Date("2024-01-15T10:35:00Z"),
+        createdAt: new Date("2025-07-15T10:30:00Z"),
+        updatedAt: new Date("2025-07-15T10:35:00Z"),
       },
       {
         id: "2", 
@@ -21,8 +21,8 @@ export async function GET() {
         fileName: "test.pdf",
         fileSize: 1536000,
         status: "processing",
-        createdAt: new Date("2024-01-14T14:20:00Z"),
-        updatedAt: new Date("2024-01-14T14:25:00Z"),
+        createdAt: new Date("2025-07-15T14:20:00Z"),
+        updatedAt: new Date("2025-07-15T14:25:00Z"),
       },
       {
         id: "3",
@@ -31,8 +31,8 @@ export async function GET() {
         fileName: "test.pdf", 
         fileSize: 3145728,
         status: "pending",
-        createdAt: new Date("2024-01-13T09:15:00Z"),
-        updatedAt: new Date("2024-01-13T09:15:00Z"),
+        createdAt: new Date("2025-07-15T09:15:00Z"),
+        updatedAt: new Date("2025-07-15T09:15:00Z"),
       }
     ];
 
