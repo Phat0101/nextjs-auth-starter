@@ -8,8 +8,8 @@ import { headers } from 'next/headers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Next.js Auth Starter',
-  description: 'A Next.js 14 starter with authentication and jobs board.',
+  title: 'DTAL Audit',
+  description: 'DTAL customs audit system',
 }
 
 export default async function RootLayout({

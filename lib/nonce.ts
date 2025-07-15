@@ -1,7 +1,11 @@
-import { randomBytes } from 'crypto'
-
 export const generateNonce = (): string => {
-  return randomBytes(16).toString('base64')
+  const randomValues = new Uint8Array(16);
+  crypto.getRandomValues(randomValues);
+  let binary = '';
+  for (let i = 0; i < randomValues.length; i++) {
+    binary += String.fromCharCode(randomValues[i]);
+  }
+  return btoa(binary);
 }
 
 export const createCSPWithNonce = (nonce: string): string => {
