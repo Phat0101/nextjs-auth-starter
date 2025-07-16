@@ -2,7 +2,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Header from './Header'
 import { headers } from 'next/headers'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -22,8 +21,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
-        <main className="container mx-auto px-4 py-8">{children}</main>
+        {children}
       </body>
       {/* Add nonce to Next.js scripts */}
       <script
